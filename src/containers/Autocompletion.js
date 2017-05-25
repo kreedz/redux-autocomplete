@@ -40,7 +40,7 @@ class Autocompletion extends React.Component {
     return (
       <div>
         <input list="data" onChange={::this.filterDataList}/>
-        <datalist id="data" ref={e => this.datalist = e}>
+        <datalist id="data">
           {options}
         </datalist>
       </div>
