@@ -7,7 +7,7 @@ class Autocompletion extends React.Component {
   constructor() {
     super();
     this.state = {
-      getOptionsSettings: {
+      settingsGettingOptions: {
         url: 'https://jsonplaceholder.typicode.com/users',
         field: 'name',
       }
@@ -17,7 +17,7 @@ class Autocompletion extends React.Component {
     this.getOptions();
   }
   getOptions() {
-    const {url, field} = this.state.getOptionsSettings;
+    const {url, field} = this.state.settingsGettingOptions;
     this.props.getOptions(url, field);
   }
   render() {
