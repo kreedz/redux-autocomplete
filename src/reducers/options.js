@@ -1,7 +1,9 @@
-const options = (state=[1, 2], action) => {
+const options = (state=[], action) => {
+  const field = action.field;
   switch (action.type) {
-    case 'FETCH_OPTIONS':
-      return [1, 2, 3];
+    case 'GET_OPTIONS_SUCCESS':
+      return action.payload.data.map(data => data[field])
+    case 'GET_OPTIONS_ERR':
     default:
       return state;
   }
