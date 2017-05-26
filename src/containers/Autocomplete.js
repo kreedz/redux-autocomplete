@@ -11,13 +11,12 @@ class Autocomplete extends React.Component {
         url: 'https://jsonplaceholder.typicode.com/users',
         field: 'name',
       },
-      filterBy: '',
     }
   }
   componentDidMount() {
     this.getOptions();
   }
-  getOptions(filterBy = this.state.filterBy) {
+  getOptions(filterBy = '') {
     const {settingsGettingOptions: {url, field}} = this.state;
     this.props.getOptions(url, field, filterBy);
   }
