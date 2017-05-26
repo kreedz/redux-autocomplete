@@ -29,7 +29,7 @@ class CustomToggle extends React.Component {
         onChange={this.onChange}
         onClick={this.handleClick}
         value={this.state.value}
-    />
+      />
     );
   }
 }
@@ -37,9 +37,6 @@ class CustomToggle extends React.Component {
 class CustomMenu extends React.Component {
   constructor(props, context) {
     super(props, context);
-
-    this.onChange = e => this.setState({ value: e.target.value });
-
     this.state = { value: '' };
   }
 
