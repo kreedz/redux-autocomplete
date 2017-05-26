@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Button, Dropdown, MenuItem, FormControl } from 'react-bootstrap'
+import { Dropdown, MenuItem, FormControl } from 'react-bootstrap'
 
 import { getOptions } from 'actions'
 
@@ -85,12 +85,11 @@ class Autocomplete extends React.Component {
     );
     return (
       <div>
-        <Button bsStyle="success">asd</Button>
         <input list="data" onChange={::this.filterDataList}/>
         <datalist id="data">
           {options}
         </datalist>
-
+        <br />
         <Dropdown id="dropdown-custom-menu">
           <CustomToggle bsRole="toggle" />
 
