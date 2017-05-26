@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { getOptions } from 'actions'
 
-class Autocompletion extends React.Component {
+class Autocomplete extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -49,4 +49,4 @@ class Autocompletion extends React.Component {
 }
 
 const mapStateToProps = ({options}) => ({options});
-export default connect(mapStateToProps, {getOptions})(Autocompletion)
+export default connect(mapStateToProps, {getOptions})(Autocomplete)

@@ -1,5 +1,5 @@
 import React from 'react';
-import Autocompletion from 'containers/Autocompletion';
+import Autocomplete from 'containers/Autocomplete';
 
-const App = () => <Autocompletion />;
+const App = () => <Autocomplete />;
 export default App;
