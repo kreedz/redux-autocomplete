@@ -49,6 +49,7 @@ module.exports = {
             options: {
                 modules: true,
                 camelCase: true,
+                importLoaders: 1,
                 localIdentName: '[path][name]__[local]--[hash:base64:5]'
             }
           }

@@ -1,60 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Dropdown, MenuItem, FormControl } from 'react-bootstrap'
+import { Dropdown, MenuItem } from 'react-bootstrap'
 
+import CustomToggle from 'components/CustomToggle'
+import CustomMenu from 'components/CustomMenu'
 import { getOptions } from 'actions'
 
-class CustomToggle extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-
-    this.handleClick = this.handleClick.bind(this);
-    this.onChange = e => this.setState({ value: e.target.value });
-
-    this.state = { value: '' };
-  }
-
-  handleClick(e) {
-    e.preventDefault();
-
-    this.props.onClick(e);
-  }
-
-  render() {
-    return (
-      <FormControl
-        ref={c => { this.input = c; }}
-        type="text"
-        placeholder="Type to filter..."
-        onChange={this.onChange}
-        onClick={this.handleClick}
-        value={this.state.value}
-      />
-    );
-  }
-}
-
-class CustomMenu extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-    this.state = { value: '' };
-  }
-
-  render() {
-    const { children } = this.props;
-    const { value } = this.state;
-
-    return (
-      <div className="dropdown-menu" style={{ padding: '' }}>
-        <ul className="list-unstyled">
-          {React.Children.toArray(children).filter(child => (
-            !value.trim() || child.props.children.indexOf(value) !== -1
-          ))}
-        </ul>
-      </div>
-    );
-  }
-}
 
 class Autocomplete extends React.Component {
   constructor() {
