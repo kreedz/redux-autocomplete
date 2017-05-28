@@ -27,9 +27,7 @@ class Autocomplete extends React.Component {
   }
   filterDataList(e) {
     const value = e.target.value;
-    this.setState(prevState =>
-      ({...prevState, input: value})
-    );
+    this.setInput(value);
     this.getOptions(value);
   }
   getHaveToToggleMenu() {
@@ -45,12 +43,22 @@ class Autocomplete extends React.Component {
     }
     return false;
   }
+  setInput(value) {
+    this.setState(prevState =>
+      ({...prevState, input: value})
+    );
+  }
   getInput() {
     return this.state.input;
   }
+  onSelect(eventKey) {
+    this.setInput(eventKey);
+  }
   render() {
     const menu = this.props.options.map((item, index) =>
-      <MenuItem key={index}>{item}</MenuItem>
+      <MenuItem eventKey={item} onSelect={::this.onSelect} key={index}>
+        {item}
+      </MenuItem>
     );
     return (
       <div>
