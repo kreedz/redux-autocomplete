@@ -1,8 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Dropdown, MenuItem } from 'react-bootstrap'
+import { FormControl, Dropdown, MenuItem } from 'react-bootstrap'
 
-import CustomToggle from 'components/CustomToggle'
 import CustomMenu from 'components/CustomMenu'
 import { getOptions } from 'actions'
 
@@ -15,6 +14,7 @@ class Autocomplete extends React.Component {
         url: 'https://jsonplaceholder.typicode.com/users',
         field: 'name',
       },
+      isMenuOpen: false,
     }
   }
   componentDidMount() {
@@ -25,27 +25,44 @@ class Autocomplete extends React.Component {
     this.props.getOptions(url, field, filterBy);
   }
   filterDataList(e) {
-    this.getOptions(e.target.value);
+    const value = e.target.value;
+    this.getOptions(value);
+    this.onChange(value);
+  }
+  toggleMenu() {
+    this.setState(prevState =>
+        ({...prevState, isMenuOpen: !prevState.isMenuOpen})
+    );
+  }
+  onChange(value) {
+    console.log('onChange value:', value, 'options.length:', this.props.options.length);
+    if (!this.state.isMenuOpen && this.props.options.length && value) {
+      this.toggleMenu();
+    }
+    if (this.state.isMenuOpen && !value) {
+      this.toggleMenu();
+    }
+    if (this.state.isMenuOpen && !this.props.options.length) {
+      this.toggleMenu();
+    }
   }
   render() {
-    const options = this.props.options.map((item, index) =>
-      <option value={item} key={index}/>
+    const menu = this.props.options.map((item, index) =>
+      <MenuItem key={index}>{item}</MenuItem>
     );
     return (
       <div>
-        <input list="data" onChange={::this.filterDataList}/>
-        <datalist id="data">
-          {options}
-        </datalist>
-        <br />
-        <Dropdown id="dropdown-custom-menu">
-          <CustomToggle bsRole="toggle" />
-
+        <Dropdown id="dropdown-custom-2"
+          className={this.state.isMenuOpen ? 'open' : ''}
+        >
+          <FormControl bsRole="toggle" className="form-control"
+            ref={c => { this.input = c; }}
+            type="text"
+            placeholder="Type to filter..."
+            onChange={::this.filterDataList}
+          />
           <CustomMenu bsRole="menu">
-            <MenuItem eventKey="1">Red</MenuItem>
-            <MenuItem eventKey="2">Blue</MenuItem>
-            <MenuItem eventKey="3" active>Orange</MenuItem>
-            <MenuItem eventKey="1">Red-Orange</MenuItem>
+            {menu}
           </CustomMenu>
         </Dropdown>
       </div>
