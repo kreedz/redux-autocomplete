@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { FormControl, Dropdown, MenuItem } from 'react-bootstrap'
+import { Dropdown, MenuItem } from 'react-bootstrap'
 
 import CustomMenu from 'components/CustomMenu'
+import CustomToggle from 'components/CustomToggle'
 import { getOptions } from 'actions'
 
 
@@ -44,6 +45,9 @@ class Autocomplete extends React.Component {
     }
     return false;
   }
+  getInput() {
+    return this.state.input;
+  }
   render() {
     const menu = this.props.options.map((item, index) =>
       <MenuItem key={index}>{item}</MenuItem>
@@ -53,11 +57,8 @@ class Autocomplete extends React.Component {
         <Dropdown id="dropdown-custom-2"
           className={::this.getHaveToToggleMenu() ? 'open' : ''}
         >
-          <FormControl bsRole="toggle" className="form-control"
-            ref={e => this.input = e}
-            type="text"
-            onChange={::this.filterDataList}
-            value={this.state.input}
+          <CustomToggle bsRole="toggle" filterDataList={::this.filterDataList}
+            getInput={::this.getInput}
           />
           <CustomMenu bsRole="menu">
             {menu}
