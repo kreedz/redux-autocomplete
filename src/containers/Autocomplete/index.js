@@ -15,6 +15,7 @@ class Autocomplete extends React.Component {
         field: 'name',
       },
       isMenuOpen: false,
+      input: '',
     }
   }
   componentDidMount() {
@@ -26,25 +27,28 @@ class Autocomplete extends React.Component {
   }
   filterDataList(e) {
     const value = e.target.value;
-    this.getOptions(value);
-    this.onChange(value);
-  }
-  toggleMenu() {
     this.setState(prevState =>
-        ({...prevState, isMenuOpen: !prevState.isMenuOpen})
+      ({...prevState, input: value})
+    );
+    this.getOptions(value);
+  }
+  toggleIsMenuOpen() {
+    this.setState(prevState =>
+      ({...prevState, isMenuOpen: !prevState.isMenuOpen})
     );
   }
-  onChange(value) {
-    console.log('onChange value:', value, 'options.length:', this.props.options.length);
-    if (!this.state.isMenuOpen && this.props.options.length && value) {
-      this.toggleMenu();
+  toggleMenu() {
+    const value = this.state.input;
+    if (!this.state.isMenuOpen && this.props.options.length && value.length) {
+      return true;
     }
-    if (this.state.isMenuOpen && !value) {
-      this.toggleMenu();
+    if (this.state.isMenuOpen && !value.length) {
+      return false;
     }
     if (this.state.isMenuOpen && !this.props.options.length) {
-      this.toggleMenu();
+      return false;
     }
+    return false;
   }
   render() {
     const menu = this.props.options.map((item, index) =>
@@ -53,13 +57,14 @@ class Autocomplete extends React.Component {
     return (
       <div>
         <Dropdown id="dropdown-custom-2"
-          className={this.state.isMenuOpen ? 'open' : ''}
+          className={::this.toggleMenu() ? 'open' : ''}
         >
           <FormControl bsRole="toggle" className="form-control"
-            ref={c => { this.input = c; }}
+            ref={e => this.input = e}
             type="text"
             placeholder="Type to filter..."
             onChange={::this.filterDataList}
+            value={this.state.input}
           />
           <CustomMenu bsRole="menu">
             {menu}
