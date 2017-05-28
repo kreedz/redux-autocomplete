@@ -14,7 +14,6 @@ class Autocomplete extends React.Component {
         url: 'https://jsonplaceholder.typicode.com/users',
         field: 'name',
       },
-      isMenuOpen: false,
       input: '',
     }
   }
@@ -32,20 +31,15 @@ class Autocomplete extends React.Component {
     );
     this.getOptions(value);
   }
-  toggleIsMenuOpen() {
-    this.setState(prevState =>
-      ({...prevState, isMenuOpen: !prevState.isMenuOpen})
-    );
-  }
-  toggleMenu() {
+  getHaveToToggleMenu() {
     const value = this.state.input;
-    if (!this.state.isMenuOpen && this.props.options.length && value.length) {
+    if (this.props.options.length && value.length) {
       return true;
     }
-    if (this.state.isMenuOpen && !value.length) {
+    if (!value.length) {
       return false;
     }
-    if (this.state.isMenuOpen && !this.props.options.length) {
+    if (!this.props.options.length) {
       return false;
     }
     return false;
@@ -57,12 +51,11 @@ class Autocomplete extends React.Component {
     return (
       <div>
         <Dropdown id="dropdown-custom-2"
-          className={::this.toggleMenu() ? 'open' : ''}
+          className={::this.getHaveToToggleMenu() ? 'open' : ''}
         >
           <FormControl bsRole="toggle" className="form-control"
             ref={e => this.input = e}
             type="text"
-            placeholder="Type to filter..."
             onChange={::this.filterDataList}
             value={this.state.input}
           />

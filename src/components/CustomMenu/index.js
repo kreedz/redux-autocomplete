@@ -9,7 +9,6 @@ class CustomMenu extends React.Component {
     super(props, context);
     this.state = { value: '' };
   }
-
   render() {
     const { children } = this.props;
     const { value } = this.state;
