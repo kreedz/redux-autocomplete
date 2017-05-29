@@ -89,4 +89,4 @@ class Autocomplete extends React.Component {
 }
 
 const mapStateToProps = ({options}) => ({options});
-export default connect(mapStateToProps, {getOptions})(Autocomplete)
+export default connect(mapStateToProps, {getOptions})(Autocomplete);
