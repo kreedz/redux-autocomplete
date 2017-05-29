@@ -38,10 +38,13 @@ class Autocomplete extends React.Component {
   }
   getIsHaveToOpenMenu() {
     const value = this.state.input;
+    if (this.props.options.isFetching) {
+      return false;
+    }
     if (this.state.isItemSelected) {
       return false;
     }
-    if (this.props.options.length && value.length) {
+    if (this.props.options.items.length && value.length) {
       return true;
     }
     return false;
@@ -59,7 +62,7 @@ class Autocomplete extends React.Component {
     this.setIsItemSelected(true);
   }
   render() {
-    const menu = this.props.options.map((item, index) =>
+    const menu = this.props.options.items.map((item, index) =>
       <MenuItem eventKey={item} onSelect={::this.onSelect} key={index}>
         {item}
       </MenuItem>
