@@ -37,7 +37,7 @@ class Autocomplete extends React.Component {
       ({...prevState, isItemSelected: value})
     );
   }
-  getHaveToToggleMenu() {
+  getIsHaveToOpenMenu() {
     const value = this.state.input;
     if (this.state.isItemSelected) {
       return false;
@@ -74,7 +74,7 @@ class Autocomplete extends React.Component {
     return (
       <div>
         <Dropdown id="dropdown-custom-2"
-          className={::this.getHaveToToggleMenu() ? 'open' : ''}
+          className={::this.getIsHaveToOpenMenu() ? 'open' : ''}
         >
           <CustomToggle bsRole="toggle" filterDataList={::this.filterDataList}
             getInput={::this.getInput}
@@ -89,4 +89,4 @@ class Autocomplete extends React.Component {
 }
 
 const mapStateToProps = ({options}) => ({options});
-export default connect(mapStateToProps, {getOptions})(Autocomplete);
+export default connect(mapStateToProps, {getOptions})(Autocomplete)
