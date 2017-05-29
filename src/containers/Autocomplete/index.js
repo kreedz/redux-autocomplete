@@ -15,6 +15,7 @@ class Autocomplete extends React.Component {
         url: 'https://jsonplaceholder.typicode.com/users',
         field: 'name',
       },
+      isItemSelected: false,
       input: '',
     }
   }
@@ -29,9 +30,18 @@ class Autocomplete extends React.Component {
     const value = e.target.value;
     this.setInput(value);
     this.getOptions(value);
+    this.setIsItemSelected(false);
+  }
+  setIsItemSelected(value) {
+    this.setState(prevState =>
+      ({...prevState, isItemSelected: value})
+    );
   }
   getHaveToToggleMenu() {
     const value = this.state.input;
+    if (this.state.isItemSelected) {
+      return false;
+    }
     if (this.props.options.length && value.length) {
       return true;
     }
@@ -53,6 +63,7 @@ class Autocomplete extends React.Component {
   }
   onSelect(eventKey) {
     this.setInput(eventKey);
+    this.setIsItemSelected(true);
   }
   render() {
     const menu = this.props.options.map((item, index) =>
