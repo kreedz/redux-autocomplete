@@ -11,8 +11,8 @@ class Autocomplete extends React.Component {
     super();
     this.state = {
       settingsGettingOptions: {
-        url: 'https://jsonplaceholder.typicode.com/users',
-        field: 'name',
+        url: 'https://jsonplaceholder.typicode.com/posts',
+        field: 'title',
       },
       isItemSelected: false,
       input: '',
