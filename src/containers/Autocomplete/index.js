@@ -45,12 +45,6 @@ class Autocomplete extends React.Component {
     if (this.props.options.length && value.length) {
       return true;
     }
-    if (!value.length) {
-      return false;
-    }
-    if (!this.props.options.length) {
-      return false;
-    }
     return false;
   }
   setInput(value) {
