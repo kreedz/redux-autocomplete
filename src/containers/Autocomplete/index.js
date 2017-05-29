@@ -6,7 +6,6 @@ import CustomMenu from 'components/CustomMenu'
 import CustomToggle from 'components/CustomToggle'
 import { getOptions } from 'actions'
 
-
 class Autocomplete extends React.Component {
   constructor() {
     super();
@@ -66,18 +65,16 @@ class Autocomplete extends React.Component {
       </MenuItem>
     );
     return (
-      <div>
-        <Dropdown id="dropdown-custom-2"
-          className={::this.getIsHaveToOpenMenu() ? 'open' : ''}
-        >
-          <CustomToggle bsRole="toggle" filterDataList={::this.filterDataList}
-            getInput={::this.getInput}
-          />
-          <CustomMenu bsRole="menu">
-            {menu}
-          </CustomMenu>
-        </Dropdown>
-      </div>
+      <Dropdown id="dropdown-custom-2"
+        className={::this.getIsHaveToOpenMenu() ? 'open' : ''}
+      >
+        <CustomToggle bsRole="toggle" filterDataList={::this.filterDataList}
+          getInput={::this.getInput}
+        />
+        <CustomMenu bsRole="menu">
+          {menu}
+        </CustomMenu>
+      </Dropdown>
     );
   }
 }
