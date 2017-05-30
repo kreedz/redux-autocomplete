@@ -15,11 +15,23 @@ class Autocomplete extends React.Component {
         field: 'title',
       },
       isItemSelected: false,
+      isMenuOpen: false,
       input: '',
     }
   }
   componentDidMount() {
     this.getOptions();
+  }
+  componentDidUpdate(prevProps, prevState) {
+    const isMenuHasToOpen = this.isMenuHasToOpen();
+    if (prevState.isMenuOpen !== isMenuHasToOpen) {
+      this.setStates({isMenuOpen: isMenuHasToOpen});
+    }
+  }
+  isMenuHasToOpen() {
+    const value = this.state.input;
+    return (this.props.options.isFetching || this.state.isItemSelected) ? false :
+      this.props.options.items.length && value.length
   }
   onSelect(eventKey) {
     this.setStates({input: eventKey, isItemSelected: true});
@@ -39,14 +51,6 @@ class Autocomplete extends React.Component {
     this.setStates({input: value, isItemSelected: false});
     this.getOptions(value);
   }
-  getIsHaveToOpenMenu() {
-    const value = this.state.input;
-    if (this.props.options.isFetching || this.state.isItemSelected) {
-      return false;
-    }
-    return this.props.options.items.length && value.length;
-  }
-
   render() {
     const menu = this.props.options.items.map((item, index) =>
       <MenuItem eventKey={item} onSelect={::this.onSelect} key={index}>
@@ -55,7 +59,7 @@ class Autocomplete extends React.Component {
     );
     return (
       <Dropdown id="dropdown-custom-2"
-        className={::this.getIsHaveToOpenMenu() ? 'open' : ''}
+        className={this.state.isMenuOpen ? 'open' : ''}
       >
         <CustomToggle bsRole="toggle" filterDataList={::this.filterDataList}
           getInput={::this.getInput}
