@@ -21,46 +21,32 @@ class Autocomplete extends React.Component {
   componentDidMount() {
     this.getOptions();
   }
+  onSelect(eventKey) {
+    this.setStates({input: eventKey, isItemSelected: true});
+  }
+  setStates(values) {
+    this.setState(prevState => ({...prevState, ...values}));
+  }
+  getInput() {
+    return this.state.input;
+  }
   getOptions(filterBy = '') {
     const {settingsGettingOptions: {url, field}} = this.state;
     this.props.getOptions(url, field, filterBy);
   }
   filterDataList(e) {
     const value = e.target.value;
-    this.setInput(value);
+    this.setStates({input: value, isItemSelected: false});
     this.getOptions(value);
-    this.setIsItemSelected(false);
-  }
-  setIsItemSelected(value) {
-    this.setState(prevState =>
-      ({...prevState, isItemSelected: value})
-    );
   }
   getIsHaveToOpenMenu() {
     const value = this.state.input;
-    if (this.props.options.isFetching) {
+    if (this.props.options.isFetching || this.state.isItemSelected) {
       return false;
     }
-    if (this.state.isItemSelected) {
-      return false;
-    }
-    if (this.props.options.items.length && value.length) {
-      return true;
-    }
-    return false;
+    return this.props.options.items.length && value.length;
   }
-  setInput(value) {
-    this.setState(prevState =>
-      ({...prevState, input: value})
-    );
-  }
-  getInput() {
-    return this.state.input;
-  }
-  onSelect(eventKey) {
-    this.setInput(eventKey);
-    this.setIsItemSelected(true);
-  }
+
   render() {
     const menu = this.props.options.items.map((item, index) =>
       <MenuItem eventKey={item} onSelect={::this.onSelect} key={index}>
