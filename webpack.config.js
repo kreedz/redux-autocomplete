@@ -39,7 +39,24 @@ module.exports = {
         }
       },
       {
+        test: [/\.eot?$/],
+        use: [
+          {
+            loader: 'file-loader'
+          }
+        ]
+      },
+      {
+        test: [/\.woff?$/, /\.woff2?$/, /\.ttf?$/, /\.svg?$/],
+        use: [
+          {
+            loader: 'url-loader'
+          }
+        ]
+      },
+      {
         test: /\.css$/,
+        exclude: /node_modules/,
         use: [
           {
             loader: 'style-loader'
@@ -52,6 +69,18 @@ module.exports = {
                 importLoaders: 1,
                 localIdentName: '[path][name]__[local]--[hash:base64:5]'
             }
+          }
+        ]
+      },
+      {
+        test: /\.css$/,
+        include: /node_modules/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader',
           }
         ]
       }

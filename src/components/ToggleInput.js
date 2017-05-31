@@ -1,13 +1,13 @@
 import React from 'react'
 import { FormControl } from 'react-bootstrap'
 
-const CustomToggle = (props) =>
+const ToggleInput = props =>
   <FormControl
     type="text"
     placeholder="Type to filter..."
-    onClick={() => {}}
     onChange={props.filterDataList}
+    onKeyDown={props.menuNavigate}
     value={props.getInput()}
   />
 
-export default CustomToggle;
+export default ToggleInput
