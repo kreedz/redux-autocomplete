@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 
 import { getOptions } from 'actions'
@@ -8,9 +7,16 @@ import ToggleInput from 'components/ToggleInput'
 
 import styles from './styles.css'
 
+const KeyCode = {
+  UP: 38,
+  DOWN: 40,
+  RETURN: 13,
+}
+
 class Autocomplete extends React.Component {
   constructor() {
     super();
+    this._menuItemNodes = new Map();
     this.state = {
       settingsGettingOptions: {
         url: 'https://jsonplaceholder.typicode.com/posts',
@@ -19,8 +25,7 @@ class Autocomplete extends React.Component {
       isItemSelected: false,
       isMenuOpen: false,
       input: '',
-      activeMenuIndex: -1,
-      selectedMenuIndex: -1,
+      selectedItemIndex: -1,
     }
   }
   componentDidMount() {
@@ -36,8 +41,8 @@ class Autocomplete extends React.Component {
   onClick(e) {
     this.setStates({input: e.target.textContent, isItemSelected: true});
   }
-  setStates(values) {
-    this.setState(prevState => ({...prevState, ...values}));
+  setStates(values, callback) {
+    this.setState(prevState => ({...prevState, ...values}), callback);
   }
   getInput() {
     return this.state.input;
@@ -48,52 +53,79 @@ class Autocomplete extends React.Component {
   }
   filterDataList(e) {
     const value = e.target.value;
-    this.setStates({input: value, isItemSelected: false});
+    this.setStates({input: value, isItemSelected: false, selectedItemIndex: -1});
     this.getOptions(value);
   }
+  getNextSelectedItemIndex() {
+    const index = this.state.selectedItemIndex;
+    const itemsLength = this.props.options.items.length;
+    if (itemsLength > 1 && index < itemsLength - 1) {
+        return index + 1;
+    }
+    if (index == itemsLength - 1 || index == -1) {
+        return 0;
+    }
+  }
+  getPreviousSelectedItemIndex() {
+    const index = this.state.selectedItemIndex;
+    const itemsLength = this.props.options.items.length;
+    if (itemsLength > 1 && index > 0) {
+      return index - 1;
+    }
+    if (index == 0 || index == -1) {
+      return itemsLength - 1;
+    }
+  }
+  scrollMenu() {
+    const li = this._menuItemNodes.get(this.state.selectedItemIndex);
+    const liCoord = li.getBoundingClientRect();
+    const ul = li.parentElement;
+    const ulCoord = ul.getBoundingClientRect();
+    if (liCoord.top < ulCoord.top) {
+      ul.scrollTop -= ulCoord.top - liCoord.top;
+    } else if (liCoord.bottom > ulCoord.bottom) {
+      ul.scrollTop += liCoord.bottom - ulCoord.bottom;
+    }
+  }
   menuNavigate(e) {
-    if (!e.altKey) {
+    if (!e.altKey || !this.state.isMenuOpen) {
       return;
     }
     switch(e.keyCode) {
-      case 38:
+      case KeyCode.UP:
+        this.setStates(
+          {
+            selectedItemIndex: this.getPreviousSelectedItemIndex()
+          },
+          this.scrollMenu
+        );
+        break;
+      case KeyCode.DOWN:
+        this.setStates(
+          {
+            selectedItemIndex: this.getNextSelectedItemIndex()
+          },
+          this.scrollMenu
+        );
+        break;
+      case KeyCode.RETURN:
         this.setStates({
-          activeMenuIndex: this.state.activeMenuIndex - 1
+            input: this.props.options.items[this.state.selectedItemIndex],
+            isItemSelected: true
         });
-        var li = ReactDOM.findDOMNode(this._menuItemNodes.get(this.state.activeMenuIndex - 1));
-        var liCoord = li.getBoundingClientRect();
-        var ul = li.parentElement;
-        var ulCoord = ul.getBoundingClientRect();
-        if (liCoord.top < ulCoord.top) {
-          ul.scrollTop = liCoord.top;
-        }
-        console.log(this._menuItemNodes.get(this.state.activeMenuIndex - 1));
-        console.log(li.textContent, li.getBoundingClientRect(), 'li.offsetTop:',li.offsetTop, 'li.parentElement.offsetTop:', li.parentElement.offsetTop, ', scrollTop:', li.parentElement.scrollTop
-          ,'parentElementTop:', li.parentElement.Top
-      );
-
-        break;
-      case 40:
-        this.setStates({
-          activeMenuIndex: this.state.activeMenuIndex + 1
-        })
-        console.log('down key');
-        break;
-      case 13:
-        console.log('enter');
     }
   }
   isMenuHasToOpen() {
     const value = this.state.input;
     return (this.props.options.isFetching || this.state.isItemSelected) ? false :
-      this.props.options.items.length && value.length
+      this.props.options.items.length && value.length > 0
   }
   onItemHover(e) {
     const value = e.target.value;
     if (e.type == 'mouseenter') {
-      this.setStates({selectedMenuIndex: value});
+      this.setStates({selectedItemIndex: value});
     } else if (e.type === 'mouseleave') {
-      this.setStates({selectedMenuIndex: -1});
+      this.setStates({selectedItemIndex: -1});
     }
   }
   render() {
@@ -101,7 +133,8 @@ class Autocomplete extends React.Component {
       <li onMouseEnter={::this.onItemHover} onMouseLeave={::this.onItemHover}
         onClick={::this.onClick}
         key={index} value={index}
-        className={index === this.state.selectedMenuIndex ? styles.onHover : ''}
+        className={index === this.state.selectedItemIndex ? styles.onHover : ''}
+        ref={e => this._menuItemNodes.set(index, e)}
       >
         {item}
       </li>
