@@ -4,7 +4,13 @@ const options = (state={isFetching: false, items: []}, action) => {
     case 'GET_OPTIONS_SUCCESS':
       return {
         ...state,
-        items: action.payload.data.map(data => data[field]).filter(item => item.startsWith(filterBy)),
+        items: action.payload.data.reduce(
+          (items, item) =>
+            item[field].startsWith(filterBy) ?
+              (items.push(item[field]), items) :
+                items,
+          []
+        ),
         isFetching: false,
       };
     case 'GET_OPTIONS_REQUEST':
