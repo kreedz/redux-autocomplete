@@ -4,6 +4,7 @@
       "quotemark": [true, "single", "jsx-double"],
       "semicolon": [true, "always", "ignore-interfaces"],
       "object-literal-sort-keys": false,
+      "arrow-parens": [1, "as-needed"],
       "trailing-comma": false
     }
 }
