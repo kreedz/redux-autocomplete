@@ -2,7 +2,8 @@
     "extends": ["tslint:latest", "tslint-react"],
     "rules": {
       "quotemark": [true, "single", "jsx-double"],
-      "semicolon": [true, "never"],
+      "semicolon": [true, "always", "ignore-interfaces"],
+      "object-literal-sort-keys": false,
       "trailing-comma": false
     }
 }
