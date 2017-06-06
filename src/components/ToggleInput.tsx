@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SFC } from 'react';
 import { FormControl, FormControlProps } from 'react-bootstrap';
 
 interface IProps extends FormControlProps {
@@ -7,7 +7,7 @@ interface IProps extends FormControlProps {
   getInput(): string;
 }
 
-const ToggleInput: React.StatelessComponent<IProps> = props => (
+const ToggleInput: SFC<IProps> = props => (
   <FormControl
     type="text"
     placeholder="Type to filter..."
