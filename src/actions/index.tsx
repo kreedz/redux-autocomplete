@@ -1,8 +1,21 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { MiddlewareAPI } from 'redux';
+import { Dispatch } from 'redux';
+
+interface ISettingsGettingOptions {
+  url: string;
+  field: string;
+}
+
+interface IStore {
+  settingsGettingOptions: ISettingsGettingOptions;
+  isItemSelected: boolean,
+  isMenuOpen: boolean,
+  input: string,
+  selectedItemIndex: number,
+}
 
 export const getOptions = (url: string, field: string, filterBy: string) =>
-  ({ dispatch }: MiddlewareAPI<any>) => {
+  (dispatch: Dispatch<IStore>) => {
     dispatch(getOptionsRequest());
     return axios.get(url)
       .then(response => dispatch(getOptionsSuccess(response, field, filterBy)))

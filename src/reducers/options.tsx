@@ -1,15 +1,16 @@
 import { AxiosResponse } from 'axios';
+import { Action } from 'redux';
 
 interface IState {
   isFetching: boolean;
   items: string[];
 }
 
-interface IAction {
+interface IAction extends Action {
   type: string,
-  payload: AxiosResponse,
-  field: string;
-  filterBy: string;
+  payload?: AxiosResponse,
+  field?: string;
+  filterBy?: string;
 }
 
 interface IItem {
