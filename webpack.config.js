@@ -35,6 +35,20 @@ module.exports = {
          ],
       },
       {
+        enforce: 'pre',
+        test: /\.css$/,
+        use: {
+          loader: 'typed-css-modules-loader',
+          options: {
+            camelCase: true
+          }
+        },
+        exclude: /node_modules/,
+        include: [
+          path.resolve(__dirname, 'src'),
+        ],
+      },
+      {
         test: /\.js$/,
         exclude: /node_modules/,
         include: [
