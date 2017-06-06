@@ -28,6 +28,8 @@
     "style-loader": "^0.18.0",
     "ts-loader": "^2.1.0",
     "tslint-loader": "^3.5.3",
+    "typed-css-modules": "^0.2.0",
+    "typed-css-modules-loader": "0.0.9",
     "typescript": "^2.3.4",
     "url-loader": "^0.5.8",
     "webpack": "^2.5.1",
