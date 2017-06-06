@@ -17,7 +17,10 @@ interface IItem {
   [key: string]: string;
 }
 
-const options = (state: IState = {isFetching: false, items: []}, action: IAction) => {
+const options = (
+    state: IState = {isFetching: false, items: []},
+    action: IAction
+) => {
   const {field, filterBy} = action;
   switch (action.type) {
     case 'GET_OPTIONS_SUCCESS':
