@@ -5,6 +5,7 @@
       "semicolon": [true, "always", "ignore-interfaces"],
       "object-literal-sort-keys": false,
       "arrow-parens": [1, "as-needed"],
+      "member-access": [true, "no-public"],
       "trailing-comma": false
     }
 }
