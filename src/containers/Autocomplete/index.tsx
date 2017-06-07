@@ -56,7 +56,7 @@ class Autocomplete extends React.Component<any, IAutocompleteState> {
       isItemSelected: true
     });
   }
-  setStates(values: object, callback?: () => void) {
+  setStates(values: Partial<IAutocompleteState>, callback?: () => void) {
     this.setState(prevState => ({...prevState, ...values}), callback);
   }
   getInput = () => {
