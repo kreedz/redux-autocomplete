@@ -1,21 +1,13 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Dispatch } from 'redux';
 
-interface ISettingsGettingOptions {
-  url: string;
-  field: string;
-}
-
-interface IStore {
-  settingsGettingOptions: ISettingsGettingOptions;
-  isItemSelected: boolean,
-  isMenuOpen: boolean,
-  input: string,
-  selectedItemIndex: number,
+export interface IOptionsStore {
+  isFetching: boolean;
+  items: string[];
 }
 
 export const getOptions = (url: string, field: string, filterBy: string) =>
-  (dispatch: Dispatch<IStore>) => {
+  (dispatch: Dispatch<IOptionsStore>) => {
     dispatch(getOptionsRequest());
     return axios.get(url)
       .then(response => dispatch(getOptionsSuccess(response, field, filterBy)))

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getOptions } from 'actions';
+import { getOptions, IOptionsStore } from 'actions';
 import Menu from 'components/Menu';
 import ToggleInput from 'components/ToggleInput';
 
@@ -13,10 +13,22 @@ const KeyCode = {
   RETURN: 13,
 };
 
-class Autocomplete extends React.Component {
+interface IAutocompleteState {
+  settingsGettingOptions: {
+    url: string;
+    field: string;
+  };
+  isItemSelected: boolean,
+  isMenuOpen: boolean,
+  input: string,
+  selectedItemIndex: number,
+}
+
+class Autocomplete extends React.Component<any, IAutocompleteState> {
+  private menuItemNodes: Map<number, HTMLElement>;
   constructor() {
     super();
-    this._menuItemNodes = new Map();
+    this.menuItemNodes = new Map();
     this.state = {
       settingsGettingOptions: {
         url: 'https://jsonplaceholder.typicode.com/posts',
@@ -31,17 +43,20 @@ class Autocomplete extends React.Component {
   componentDidMount() {
     this.getOptions();
   }
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: any, prevState: IAutocompleteState) {
     const isMenuHasToOpen = this.isMenuHasToOpen();
     if (prevState.isMenuOpen !== isMenuHasToOpen) {
       this.setStates({isMenuOpen: isMenuHasToOpen});
     }
   }
 
-  onClick = e => {
-    this.setStates({input: e.target.textContent, isItemSelected: true});
+  onClick = (e: React.MouseEvent<HTMLLIElement>) => {
+    this.setStates({
+      input: (e.target as HTMLLIElement).textContent,
+      isItemSelected: true
+    });
   }
-  setStates(values, callback) {
+  setStates(values: object, callback?: () => void) {
     this.setState(prevState => ({...prevState, ...values}), callback);
   }
   getInput = () => {
@@ -51,8 +66,8 @@ class Autocomplete extends React.Component {
     const {settingsGettingOptions: {url, field}} = this.state;
     this.props.getOptions(url, field, filterBy);
   }
-  filterDataList = e => {
-    const value = e.target.value;
+  filterDataList = (e: React.FormEvent<HTMLInputElement>) => {
+    const value = (e.target as HTMLInputElement).value;
     this.setStates({
       input: value, isItemSelected: false, selectedItemIndex: -1
     });
@@ -79,7 +94,7 @@ class Autocomplete extends React.Component {
     }
   }
   scrollMenu() {
-    const li = this._menuItemNodes.get(this.state.selectedItemIndex);
+    const li = this.menuItemNodes.get(this.state.selectedItemIndex);
     const liCoord = li.getBoundingClientRect();
     const ul = li.parentElement;
     const ulCoord = ul.getBoundingClientRect();
@@ -89,7 +104,7 @@ class Autocomplete extends React.Component {
       ul.scrollTop += liCoord.bottom - ulCoord.bottom;
     }
   }
-  menuNavigate = e => {
+  menuNavigate = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!e.altKey || !this.state.isMenuOpen) {
       return;
     }
@@ -122,8 +137,8 @@ class Autocomplete extends React.Component {
     return (this.props.options.isFetching || this.state.isItemSelected) ?
       false : this.props.options.items.length && value.length > 0;
   }
-  onItemHover = e => {
-    const value = e.target.value;
+  onItemHover = (e: React.MouseEvent<HTMLLIElement>) => {
+    const value = (e.target as HTMLLIElement).value;
     if (e.type === 'mouseenter') {
       this.setStates({selectedItemIndex: value});
     } else if (e.type === 'mouseleave') {
@@ -131,8 +146,8 @@ class Autocomplete extends React.Component {
     }
   }
   render() {
-    const setMenuItem = index => e => this._menuItemNodes.set(index, e);
-    const menu = this.props.options.items.map((item, index) => (
+    const setMenuItem = (index: number) => (e: HTMLLIElement) => this.menuItemNodes.set(index, e);
+    const menu = this.props.options.items.map((item: string, index: number) => (
       <li
         onMouseEnter={this.onItemHover}
         onMouseLeave={this.onItemHover}
@@ -163,5 +178,5 @@ class Autocomplete extends React.Component {
   }
 }
 
-const mapStateToProps = ({options}) => ({options});
+const mapStateToProps = ({options}: {options: IOptionsStore}) => ({options});
 export default connect(mapStateToProps, {getOptions})(Autocomplete);
