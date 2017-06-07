@@ -146,7 +146,9 @@ class Autocomplete extends React.Component<any, IAutocompleteState> {
     }
   }
   render() {
-    const setMenuItem = (index: number) => (e: HTMLLIElement) => this.menuItemNodes.set(index, e);
+    const setMenuItem = (index: number) =>
+      (e: HTMLLIElement) =>
+        this.menuItemNodes.set(index, e);
     const menu = this.props.options.items.map((item: string, index: number) => (
       <li
         onMouseEnter={this.onItemHover}
