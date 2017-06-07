@@ -23,12 +23,14 @@ const options = (
 ): IOptionsState => {
   const {field, filterBy} = action;
   let partialState: Partial<IOptionsState> | undefined;
+  const getNonUndefinedValue = (itemField: string) =>
+    itemField == null ? '' : itemField;
   switch (action.type) {
     case 'GET_OPTIONS_SUCCESS':
       partialState = {
         items: action.payload.data.reduce(
           (items: string[], item: IItem) =>
-            item[field].startsWith(filterBy) ?
+            getNonUndefinedValue(item[field]).startsWith(filterBy) ?
               (items.push(item[field]), items) :
                 items,
           []
