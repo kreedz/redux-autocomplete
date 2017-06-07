@@ -1,12 +1,12 @@
 import { AxiosResponse } from 'axios';
 import { Action } from 'redux';
 
-interface IState {
+interface IOptionsState {
   isFetching: boolean;
   items: string[];
 }
 
-interface IAction extends Action {
+interface IOptionsAction extends Action {
   type: string,
   payload?: AxiosResponse,
   field?: string;
@@ -18,14 +18,14 @@ interface IItem {
 }
 
 const options = (
-    state: IState = {isFetching: false, items: []},
-    action: IAction
-) => {
+    state: IOptionsState = {isFetching: false, items: []},
+    action: IOptionsAction
+): IOptionsState => {
   const {field, filterBy} = action;
+  let partialState: Partial<IOptionsState> | undefined;
   switch (action.type) {
     case 'GET_OPTIONS_SUCCESS':
-      return {
-        ...state,
+      partialState = {
         items: action.payload.data.reduce(
           (items: string[], item: IItem) =>
             item[field].startsWith(filterBy) ?
@@ -35,15 +35,18 @@ const options = (
         ),
         isFetching: false,
       };
+      break;
     case 'GET_OPTIONS_REQUEST':
-      return {
-        ...state,
+      partialState = {
         isFetching: true,
       };
+      break;
     case 'GET_OPTIONS_ERR':
     default:
-      return state;
+      partialState = null;
+      break;
   }
+  return partialState != null ? {...state, ...partialState} : state;
 };
 
 export default options;

@@ -1,9 +1,15 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { Dispatch } from 'redux';
+import { Action, Dispatch } from 'redux';
 
 export interface IOptionsStore {
   isFetching: boolean;
   items: string[];
+}
+
+interface IOptionsAction extends Action {
+  payload?: AxiosResponse | AxiosError;
+  field?: string;
+  filterBy?: string;
 }
 
 export const getOptions = (url: string, field: string, filterBy: string) =>
@@ -15,16 +21,20 @@ export const getOptions = (url: string, field: string, filterBy: string) =>
   };
 
 const getOptionsSuccess = (
-  response: AxiosResponse, field: string, filterBy: string) => ({
+    response: AxiosResponse, field: string, filterBy: string): IOptionsAction =>
+  ({
     type: 'GET_OPTIONS_SUCCESS',
     payload: response,
     field,
     filterBy,
   });
 
-const getOptionsErr = (err: AxiosError) => ({
+const getOptionsErr = (err: AxiosError): IOptionsAction => ({
   type: 'GET_OPTIONS_ERR',
   payload: err
 });
 
-const getOptionsRequest = () => ({ type: 'GET_OPTIONS_REQUEST' });
+const getOptionsRequest = (): IOptionsAction =>
+  ({
+    type: 'GET_OPTIONS_REQUEST'
+  });
