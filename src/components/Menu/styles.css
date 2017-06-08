@@ -2,6 +2,11 @@ div.dropdown-menu {
   margin: 0;
   border-radius: 0px;
   min-width: 100%;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+}
+
+.form-controls:focus {
+  box-shadow: none !important;
 }
 
 .footer:before {
