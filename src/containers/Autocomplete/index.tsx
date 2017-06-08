@@ -93,17 +93,6 @@ class Autocomplete extends React.Component<any, IAutocompleteState> {
       return itemsLength - 1;
     }
   }
-  scrollMenu() {
-    const li = this.menuItemNodes.get(this.state.selectedItemIndex);
-    const liCoord = li.getBoundingClientRect();
-    const ul = li.parentElement;
-    const ulCoord = ul.getBoundingClientRect();
-    if (liCoord.top < ulCoord.top) {
-      ul.scrollTop -= ulCoord.top - liCoord.top;
-    } else if (liCoord.bottom > ulCoord.bottom) {
-      ul.scrollTop += liCoord.bottom - ulCoord.bottom;
-    }
-  }
   menuNavigate = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!e.altKey || !this.state.isMenuOpen) {
       return;
@@ -114,7 +103,6 @@ class Autocomplete extends React.Component<any, IAutocompleteState> {
           {
             selectedItemIndex: this.getPreviousSelectedItemIndex()
           },
-          this.scrollMenu
         );
         break;
       case KeyCode.DOWN:
@@ -122,7 +110,6 @@ class Autocomplete extends React.Component<any, IAutocompleteState> {
           {
             selectedItemIndex: this.getNextSelectedItemIndex()
           },
-          this.scrollMenu
         );
         break;
       case KeyCode.RETURN:
