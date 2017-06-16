@@ -24,7 +24,7 @@ interface IAutocompleteState {
   selectedItemIndex: number,
 }
 
-class Autocomplete extends React.Component<any, IAutocompleteState> {
+class Autocomplete extends React.Component<any, any> {
   private menuItemNodes: Map<number, HTMLElement>;
   constructor() {
     super();
