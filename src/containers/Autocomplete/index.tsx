@@ -26,6 +26,7 @@ interface IAutocompleteState {
 
 class Autocomplete extends React.Component<any, any> {
   private menuItemNodes: Map<number, HTMLElement>;
+
   constructor() {
     super();
     this.menuItemNodes = new Map();
@@ -40,9 +41,11 @@ class Autocomplete extends React.Component<any, any> {
       selectedItemIndex: -1,
     };
   }
+
   componentDidMount() {
     this.getOptions();
   }
+
   componentDidUpdate(prevProps: any, prevState: IAutocompleteState) {
     const isMenuHasToOpen = this.isMenuHasToOpen();
     if (prevState.isMenuOpen !== isMenuHasToOpen) {
@@ -56,16 +59,20 @@ class Autocomplete extends React.Component<any, any> {
       isItemSelected: true
     });
   }
+
   setStates(values: Partial<IAutocompleteState>, callback?: () => void) {
     this.setState(prevState => ({...prevState, ...values}), callback);
   }
+
   getInput = () => {
     return this.state.input;
   }
+
   getOptions(filterBy = '') {
     const {settingsGettingOptions: {url, field}} = this.state;
     this.props.getOptions(url, field, filterBy);
   }
+
   filterDataList = (e: React.FormEvent<HTMLInputElement>) => {
     const value = (e.target as HTMLInputElement).value;
     this.setStates({
@@ -73,6 +80,7 @@ class Autocomplete extends React.Component<any, any> {
     });
     this.getOptions(value);
   }
+
   getNextSelectedItemIndex() {
     const index = this.state.selectedItemIndex;
     const itemsLength = this.props.options.items.length;
@@ -83,6 +91,7 @@ class Autocomplete extends React.Component<any, any> {
         return 0;
     }
   }
+
   getPreviousSelectedItemIndex() {
     const index = this.state.selectedItemIndex;
     const itemsLength = this.props.options.items.length;
@@ -93,6 +102,7 @@ class Autocomplete extends React.Component<any, any> {
       return itemsLength - 1;
     }
   }
+
   menuNavigate = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!e.altKey || !this.state.isMenuOpen) {
       return;
@@ -119,11 +129,13 @@ class Autocomplete extends React.Component<any, any> {
         });
     }
   }
+
   isMenuHasToOpen() {
     const value = this.state.input;
     return (this.props.options.isFetching || this.state.isItemSelected) ?
       false : this.props.options.items.length && value.length > 0;
   }
+
   onItemHover = (e: React.MouseEvent<HTMLLIElement>) => {
     const value = (e.target as HTMLLIElement).value;
     if (e.type === 'mouseenter') {
@@ -132,6 +144,7 @@ class Autocomplete extends React.Component<any, any> {
       this.setStates({selectedItemIndex: -1});
     }
   }
+
   render() {
     const setMenuItem = (index: number) =>
       (e: HTMLLIElement) =>
