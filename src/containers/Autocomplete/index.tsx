@@ -46,18 +46,16 @@ class Autocomplete extends React.Component<any, any> {
     this.getOptions();
   }
 
-  componentDidUpdate(prevProps: any, prevState: IAutocompleteState) {
+  componentDidUpdate(prevProps: any, prevStateArg: IAutocompleteState) {
     const isMenuHasToOpen = this.isMenuHasToOpen();
-    if (prevState.isMenuOpen !== isMenuHasToOpen) {
-      this.setStates({isMenuOpen: isMenuHasToOpen});
+    if (prevStateArg.isMenuOpen !== isMenuHasToOpen) {
+      this.setState(prevState => ({...prevState, isMenuOpen: isMenuHasToOpen}));
     }
   }
 
   onClick = (e: React.MouseEvent<HTMLLIElement>) => {
-    this.setStates({
-      input: (e.target as HTMLLIElement).textContent,
-      isItemSelected: true
-    });
+    const input = (e.target as HTMLLIElement).textContent;
+    this.setState(prevState => ({...prevState, input, isItemSelected: true}));
   }
 
   setStates(values: Partial<IAutocompleteState>, callback?: () => void) {
@@ -75,9 +73,9 @@ class Autocomplete extends React.Component<any, any> {
 
   filterDataList = (e: React.FormEvent<HTMLInputElement>) => {
     const value = (e.target as HTMLInputElement).value;
-    this.setStates({
-      input: value, isItemSelected: false, selectedItemIndex: -1
-    });
+    this.setState(prevState => ({
+      ...prevState, input: value, isItemSelected: false, selectedItemIndex: -1
+    }));
     this.getOptions(value);
   }
 
@@ -109,24 +107,23 @@ class Autocomplete extends React.Component<any, any> {
     }
     switch (e.keyCode) {
       case KeyCode.UP:
-        this.setStates(
-          {
-            selectedItemIndex: this.getPreviousSelectedItemIndex()
-          },
-        );
+        this.setState(prevState => ({
+          ...prevState,
+          selectedItemIndex: this.getPreviousSelectedItemIndex()
+        }));
         break;
       case KeyCode.DOWN:
-        this.setStates(
-          {
-            selectedItemIndex: this.getNextSelectedItemIndex()
-          },
-        );
+        this.setState(prevState => ({
+          ...prevState,
+          selectedItemIndex: this.getNextSelectedItemIndex()
+        }));
         break;
       case KeyCode.RETURN:
-        this.setStates({
-            input: this.props.options.items[this.state.selectedItemIndex],
-            isItemSelected: true
-        });
+        this.setState(prevState => ({
+          ...prevState,
+          input: this.props.options.items[this.state.selectedItemIndex],
+          isItemSelected: true
+        }));
     }
   }
 
@@ -139,9 +136,9 @@ class Autocomplete extends React.Component<any, any> {
   onItemHover = (e: React.MouseEvent<HTMLLIElement>) => {
     const value = (e.target as HTMLLIElement).value;
     if (e.type === 'mouseenter') {
-      this.setStates({selectedItemIndex: value});
+      this.setState(prevState => ({...prevState, selectedItemIndex: value}));
     } else if (e.type === 'mouseleave') {
-      this.setStates({selectedItemIndex: -1});
+      this.setState(prevState => ({...prevState, selectedItemIndex: -1}));
     }
   }
 
