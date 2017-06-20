@@ -76,24 +76,24 @@ class Autocomplete extends React.Component<any, any> {
   }
 
   getNextSelectedItemIndex() {
-    const index = this.state.selectedItemIndex;
-    const itemsLength = this.props.options.items.length;
-    if (itemsLength > 1 && index < itemsLength - 1) {
-        return index + 1;
+    const { selectedItemIndex } = this.state;
+    const { length } = this.props.options.items;
+    if (length > 1 && selectedItemIndex < length - 1) {
+        return selectedItemIndex + 1;
     }
-    if (index === itemsLength - 1 || index === -1) {
+    if (selectedItemIndex === length - 1 || selectedItemIndex === -1) {
         return 0;
     }
   }
 
   getPreviousSelectedItemIndex() {
-    const index = this.state.selectedItemIndex;
-    const itemsLength = this.props.options.items.length;
-    if (itemsLength > 1 && index > 0) {
-      return index - 1;
+    const { selectedItemIndex } = this.state;
+    const { length } = this.props.options.items;
+    if (length > 1 && selectedItemIndex > 0) {
+      return selectedItemIndex - 1;
     }
-    if (index === 0 || index === -1) {
-      return itemsLength - 1;
+    if (selectedItemIndex === 0 || selectedItemIndex === -1) {
+      return length - 1;
     }
   }
 
@@ -124,9 +124,9 @@ class Autocomplete extends React.Component<any, any> {
   }
 
   isMenuHasToOpen() {
-    const value = this.state.input;
+    const { input } = this.state;
     return (this.props.options.isFetching || this.state.isItemSelected) ?
-      false : this.props.options.items.length && value.length > 0;
+      false : this.props.options.items.length && input.length > 0;
   }
 
   onItemHover = (e: React.MouseEvent<HTMLLIElement>) => {
