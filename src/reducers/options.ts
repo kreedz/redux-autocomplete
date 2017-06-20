@@ -17,6 +17,22 @@ interface IItem {
   [key: string]: string;
 }
 
+const getFilteredItems = (
+  data: AxiosResponse['data'],
+  field: IOptionsAction['field'],
+  filterBy: IOptionsAction['filterBy']
+) =>
+  data.reduce(
+    (items: IOptionsState['items'], item: IItem) =>
+      getNonUndefinedValue(item[field]).startsWith(filterBy) ?
+        (items.push(item[field]), items) :
+          items,
+    []
+  );
+
+const getNonUndefinedValue = (itemField: string) =>
+  itemField == null ? '' : itemField;
+
 const initialState: IOptionsState = {isFetching: false, items: []};
 
 const options = (
@@ -24,33 +40,22 @@ const options = (
     action: IOptionsAction
 ): IOptionsState => {
   const {field, filterBy} = action;
-  let partialState: Partial<IOptionsState> | undefined;
-  const getNonUndefinedValue = (itemField: string) =>
-    itemField == null ? '' : itemField;
   switch (action.type) {
     case 'GET_OPTIONS_SUCCESS':
-      partialState = {
-        items: action.payload.data.reduce(
-          (items: string[], item: IItem) =>
-            getNonUndefinedValue(item[field]).startsWith(filterBy) ?
-              (items.push(item[field]), items) :
-                items,
-          []
-        ),
+      return {
+        ...state,
+        items: getFilteredItems(action.payload.data, field, filterBy),
         isFetching: false,
       };
-      break;
     case 'GET_OPTIONS_REQUEST':
-      partialState = {
+      return {
+        ...state,
         isFetching: true,
       };
-      break;
     case 'GET_OPTIONS_ERR':
     default:
-      partialState = null;
-      break;
+      return state;
   }
-  return partialState != null ? {...state, ...partialState} : state;
 };
 
 export default options;
