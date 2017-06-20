@@ -5,7 +5,7 @@ import Autocomplete from 'containers/Autocomplete';
 
 import styles from './styles.css';
 
-const App: SFC<any> = () => (
+const App = () => (
   <Grid>
     <Row className="show-grid">
       <Col xs={4} xsOffset={4}>

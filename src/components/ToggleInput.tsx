@@ -9,7 +9,7 @@ interface IProps extends FormControlProps {
   getInput(): string;
 }
 
-const ToggleInput: SFC<IProps> = props => (
+const ToggleInput = (props: IProps) => (
   <FormControl
     bsClass={styles.clearGlow}
     type="text"

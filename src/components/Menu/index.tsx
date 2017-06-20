@@ -2,7 +2,7 @@ import React from 'react';
 
 import styles from './styles.css';
 
-const Menu: React.SFC<{children?: React.ReactNode}> = ({children}) => (
+const Menu = ({children}: {children: React.ReactNode}) => (
   <div className={`${styles.dropdownMenu} dropdown-menu`}>
     <ul className="list-unstyled">
       {children}
