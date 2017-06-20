@@ -17,8 +17,10 @@ interface IItem {
   [key: string]: string;
 }
 
+const initialState: IOptionsState = {isFetching: false, items: []};
+
 const options = (
-    state: IOptionsState = {isFetching: false, items: []},
+    state: IOptionsState = initialState,
     action: IOptionsAction
 ): IOptionsState => {
   const {field, filterBy} = action;
